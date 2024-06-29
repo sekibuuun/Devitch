@@ -1,0 +1,210 @@
+openapi: '3.0.2'
+info:
+  title: Devitch
+  version: '1.0'
+servers:
+  - url: http://localhost:3000
+    description: Development server
+paths:
+  /users:
+    get:
+      tags:
+        - users
+      summary: Get your info.
+      description: Returns an array of User model
+      parameters: []
+      responses:
+        '200':
+          description: A JSON array of User model
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+                example:
+                  - userid: 1
+                    username: 'user1'
+                    githubid: 'github1'
+                    googleid: 'google1'
+    post:
+      tags:
+        - users
+      summary: Create a new user.
+      description: Create a new user with the given User model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              userid: 1
+              username: 'user1'
+              githubid: 'github1'
+              googleid: 'google1'
+      responses:
+        '200':
+          description: A JSON object of User model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                userid: 1
+                username: 'user1'
+                githubid: 'github1'
+                googleid: 'google1'
+    patch:
+      tags:
+        - users
+      summary: Update your info.
+      description: Update a user with the given User model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+            example:
+              username: 'user1'
+              githubid: 'github1'
+              googleid: 'google1'
+      responses:
+        '200':
+          description: A JSON object of User model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                userid: 1
+                username: 'user1'
+                githubid: 'github1'
+                googleid: 'google1'
+    delete:
+      tags:
+        - users
+      summary: Delete a user.
+      description: Delete  your account.
+      responses:
+        '200':
+          description: A JSON object of User model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                User deleted
+  /users/{userid}:
+    get:
+      tags:
+        - users/{userid}
+      summary: Get users.
+      description: Returns a follow list
+      parameters:
+        - name: userid
+          in: path
+          description: ID of user to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A JSON object of follow list
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                  - userid: 1
+                    username: 'user1'
+                    githubid: 'github1'
+                    googleid: 'google1'
+                  - userid: 2
+                    username: 'user2'
+                    githubid: 'github2'
+                    googleid: 'google2'
+    post:
+      tags:
+        - users/{userid}
+      summary: Follow a user.
+      description: Follow a user with the given userid
+      parameters:
+        - name: userid
+          in: path
+          description: ID of user to follow
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A JSON object of User model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                userid: 1
+                username: 'user1'
+                githubid: 'github1'
+                googleid: 'google1'
+    delete:
+      tags:
+        - users/{userid}
+      summary: Unfollow a user.
+      description: Unfollow a user with the given userid
+      parameters:
+        - name: userid
+          in: path
+          description: ID of user to unfollow
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        '200':
+          description: A JSON object of User model
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+              example:
+                User unfollowed
+components:
+  schemas:
+    User:
+      type: object
+      required:
+        - id
+      properties:
+        userid:
+          type: integer
+          format: int64
+        username:
+          type: string
+        githubid:
+          type: string
+        googleid:
+          type: string
+    Stream:
+      type: object
+      required:
+        - id
+      properties:
+        streamid:
+          type: integer
+          format: int64
+        title:
+          type: string
+        comments:
+          items:
+            type: string
+        genre:
+          items:
+            type: string
+        listeners:
+          items:
+            type: array
