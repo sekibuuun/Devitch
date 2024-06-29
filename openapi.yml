@@ -67,9 +67,9 @@ paths:
             schema:
               $ref: "#/components/schemas/User"
             example:
-              username: "user1"
-              githubid: "github1"
-              googleid: "google1"
+              username: "user2"
+              githubid: "github2"
+              googleid: "google2"
       responses:
         "200":
           description: A JSON object of User model
@@ -79,14 +79,14 @@ paths:
                 $ref: "#/components/schemas/User"
               example:
                 userid: 1
-                username: "user1"
-                githubid: "github1"
-                googleid: "google1"
+                username: "user2"
+                githubid: "github2"
+                googleid: "google2"
     delete:
       tags:
         - users
-      summary: Delete a user.
-      description: Delete  your account.
+      summary: Delete your info.
+      description: Delete your account.
       responses:
         "200":
           description: A JSON object of User model
@@ -99,7 +99,7 @@ paths:
     get:
       tags:
         - users/{userid}
-      summary: Get users.
+      summary: Get follow list.
       description: Returns a follow list
       parameters:
         - name: userid
@@ -115,16 +115,12 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/BaseUser"
               example:
                 - userid: 1
                   username: "user1"
-                  githubid: "github1"
-                  googleid: "google1"
                 - userid: 2
                   username: "user2"
-                  githubid: "github2"
-                  googleid: "google2"
     post:
       tags:
         - users/{userid}
@@ -148,8 +144,6 @@ paths:
               example:
                 userid: 1
                 username: "user1"
-                githubid: "github1"
-                googleid: "google1"
     delete:
       tags:
         - users/{userid}
@@ -177,6 +171,13 @@ paths:
         - streams
       summary: Get all streams.
       description: Returns an stream list.
+      parameters:
+        - name: genre
+          in: query
+          description: Genre of stream to return
+          required: false
+          schema:
+            type: string
       responses:
         "200":
           description: A JSON array of Stream model
@@ -304,7 +305,7 @@ paths:
               example: Stream deleted
 components:
   schemas:
-    User:
+    BaseUser:
       type: object
       required:
         - userid
@@ -315,10 +316,15 @@ components:
           format: int64
         username:
           type: string
-        githubid:
-          type: string
-        googleid:
-          type: string
+    User:
+      allOf:
+        - $ref: "#/components/schemas/BaseUser"
+        - type: object
+          properties:
+            githubid:
+              type: string
+            googleid:
+              type: string
     BaseStream:
       type: object
       required:
