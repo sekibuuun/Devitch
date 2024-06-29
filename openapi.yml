@@ -1,7 +1,7 @@
-openapi: '3.0.2'
+openapi: "3.0.2"
 info:
   title: Devitch
-  version: '1.0'
+  version: "1.0"
 servers:
   - url: http://localhost:3000
     description: Development server
@@ -14,19 +14,19 @@ paths:
       description: Returns an array of User model
       parameters: []
       responses:
-        '200':
+        "200":
           description: A JSON array of User model
           content:
             application/json:
               schema:
                 type: array
                 items:
-                  $ref: '#/components/schemas/User'
+                  $ref: "#/components/schemas/User"
                 example:
                   - userid: 1
-                    username: 'user1'
-                    githubid: 'github1'
-                    googleid: 'google1'
+                    username: "user1"
+                    githubid: "github1"
+                    googleid: "google1"
     post:
       tags:
         - users
@@ -37,24 +37,24 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
             example:
               userid: 1
-              username: 'user1'
-              githubid: 'github1'
-              googleid: 'google1'
+              username: "user1"
+              githubid: "github1"
+              googleid: "google1"
       responses:
-        '200':
+        "200":
           description: A JSON object of User model
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
               example:
                 userid: 1
-                username: 'user1'
-                githubid: 'github1'
-                googleid: 'google1'
+                username: "user1"
+                githubid: "github1"
+                googleid: "google1"
     patch:
       tags:
         - users
@@ -65,37 +65,36 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/User'
+              $ref: "#/components/schemas/User"
             example:
-              username: 'user1'
-              githubid: 'github1'
-              googleid: 'google1'
+              username: "user1"
+              githubid: "github1"
+              googleid: "google1"
       responses:
-        '200':
+        "200":
           description: A JSON object of User model
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
               example:
                 userid: 1
-                username: 'user1'
-                githubid: 'github1'
-                googleid: 'google1'
+                username: "user1"
+                githubid: "github1"
+                googleid: "google1"
     delete:
       tags:
         - users
       summary: Delete a user.
       description: Delete  your account.
       responses:
-        '200':
+        "200":
           description: A JSON object of User model
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
-              example:
-                User deleted
+                $ref: "#/components/schemas/User"
+              example: User deleted
   /users/{userid}:
     get:
       tags:
@@ -111,21 +110,21 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: A JSON object of follow list
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
               example:
-                  - userid: 1
-                    username: 'user1'
-                    githubid: 'github1'
-                    googleid: 'google1'
-                  - userid: 2
-                    username: 'user2'
-                    githubid: 'github2'
-                    googleid: 'google2'
+                - userid: 1
+                  username: "user1"
+                  githubid: "github1"
+                  googleid: "google1"
+                - userid: 2
+                  username: "user2"
+                  githubid: "github2"
+                  googleid: "google2"
     post:
       tags:
         - users/{userid}
@@ -140,17 +139,17 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: A JSON object of User model
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
               example:
                 userid: 1
-                username: 'user1'
-                githubid: 'github1'
-                googleid: 'google1'
+                username: "user1"
+                githubid: "github1"
+                googleid: "google1"
     delete:
       tags:
         - users/{userid}
@@ -165,20 +164,151 @@ paths:
             type: integer
             format: int64
       responses:
-        '200':
+        "200":
           description: A JSON object of User model
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/User'
+                $ref: "#/components/schemas/User"
+              example: User unfollowed
+  /streams:
+    get:
+      tags:
+        - streams
+      summary: Get all streams.
+      description: Returns an stream list.
+      responses:
+        "200":
+          description: A JSON array of Stream model
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/BaseStream"
+                example:
+                  - streamid: 1
+                    title: "stream1"
+                    genre: ["genre1", "genre2"]
+                  - streamid: 2
+                    title: "stream2"
+                    genre: ["genre1", "genre2"]
+    post:
+      tags:
+        - streams
+      summary: Create a new stream.
+      description: Create a new stream with the given Stream model
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BaseStream"
+            example:
+              streamid: 1
+              title: "stream1"
+              genre: ["genre1", "genre2"]
+      responses:
+        "200":
+          description: A JSON object of Stream model
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stream"
               example:
-                User unfollowed
+                streamid: 1
+                title: "stream1"
+                genre: ["genre1", "genre2"]
+                comments: []
+                listeners: [{}]
+  /streams/{streamid}:
+    get:
+      tags:
+        - streams/{streamid}
+      summary: Get a stream.
+      description: Returns a stream with the given streamid
+      parameters:
+        - name: streamid
+          in: path
+          description: ID of stream to return
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: A JSON object of Stream model
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stream"
+              example:
+                streamid: 1
+                title: "stream1"
+                genre: ["genre1", "genre2"]
+                comments: []
+                listeners: [{}]
+    patch:
+      tags:
+        - streams/{streamid}
+      summary: Update a stream.
+      description: Update a stream with the given Stream model
+      parameters:
+        - name: streamid
+          in: path
+          description: ID of stream to update
+          required: true
+          schema:
+            type: integer
+            format: int64
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BaseStream"
+            example:
+              title: "stream1"
+              genre: ["genre1", "genre2"]
+      responses:
+        "200":
+          description: A JSON object of Stream model
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/BaseStream"
+              example:
+                streamid: 1
+                title: "stream2"
+                genre: ["genre3"]
+    delete:
+      tags:
+        - streams/{streamid}
+      summary: Delete a stream.
+      description: Delete a stream with the given streamid
+      parameters:
+        - name: streamid
+          in: path
+          description: ID of stream to delete
+          required: true
+          schema:
+            type: integer
+            format: int64
+      responses:
+        "200":
+          description: A JSON object of Stream model
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Stream"
+              example: Stream deleted
 components:
   schemas:
     User:
       type: object
       required:
-        - id
+        - userid
+        - username
       properties:
         userid:
           type: integer
@@ -189,22 +319,31 @@ components:
           type: string
         googleid:
           type: string
-    Stream:
+    BaseStream:
       type: object
       required:
-        - id
+        - streamid
+        - title
       properties:
         streamid:
           type: integer
           format: int64
         title:
           type: string
-        comments:
-          items:
-            type: string
         genre:
+          type: array
           items:
             type: string
-        listeners:
-          items:
-            type: array
+    Stream:
+      allOf:
+        - $ref: "#/components/schemas/BaseStream"
+        - type: object
+          properties:
+            comments:
+              type: array
+              items:
+                type: string
+            listeners:
+              type: array
+              items:
+                $ref: "#/components/schemas/User"
