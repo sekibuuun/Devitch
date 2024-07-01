@@ -9,28 +9,27 @@ paths:
   /users:
     get:
       tags:
-        - users
-      summary: Get your info.
+        - ユーザー関連
+      summary: 自分のアカウントの情報を取得
       description: Returns an array of User model
-      parameters: []
+      security:
+        - BearerAuth: []
       responses:
         "200":
           description: A JSON array of User model
           content:
             application/json:
               schema:
-                type: array
-                items:
-                  $ref: "#/components/schemas/User"
+                $ref: "#/components/schemas/User"
                 example:
-                  - userid: 1
-                    username: "user1"
-                    githubid: "github1"
-                    googleid: "google1"
-    post:
+                  - id: 1
+                    name: "user1"
+                    links: ["https://github.com"]
+                    followers: []
+    post: #トークンを返す
       tags:
-        - users
-      summary: Create a new user.
+        - ユーザー関連
+      summary: 新規ユーザー作成
       description: Create a new user with the given User model
       requestBody:
         required: true
@@ -57,9 +56,11 @@ paths:
                 googleid: "google1"
     patch:
       tags:
-        - users
-      summary: Update your info.
+        - ユーザー関連
+      summary: 自分のアカウントの情報を更新
       description: Update a user with the given User model
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
@@ -84,9 +85,11 @@ paths:
                 googleid: "google2"
     delete:
       tags:
-        - users
-      summary: Delete your info.
+        - ユーザー関連
+      summary: 自分のアカウントを削除
       description: Delete your account.
+      security:
+        - BearerAuth: []
       responses:
         "200":
           description: A JSON object of User model
@@ -98,9 +101,9 @@ paths:
   /users/{userid}:
     get:
       tags:
-        - users/{userid}
-      summary: Get follow list.
-      description: Returns a follow list
+        - ユーザー関連
+      summary: 他のユーザーの情報を取得
+      description: Returns a user profile.
       parameters:
         - name: userid
           in: path
@@ -115,7 +118,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BaseUser"
+                $ref: "#/components/schemas/User"
               example:
                 - userid: 1
                   username: "user1"
@@ -123,9 +126,11 @@ paths:
                   username: "user2"
     post:
       tags:
-        - users/{userid}
-      summary: Follow a user.
+        - ユーザー関連
+      summary: ユーザーをフォロー
       description: Follow a user with the given userid
+      security:
+        - BearerAuth: []
       parameters:
         - name: userid
           in: path
@@ -146,9 +151,11 @@ paths:
                 username: "user1"
     delete:
       tags:
-        - users/{userid}
-      summary: Unfollow a user.
+        - ユーザー関連
+      summary: ユーザーのフォローを解除
       description: Unfollow a user with the given userid
+      security:
+        - BearerAuth: []
       parameters:
         - name: userid
           in: path
@@ -168,8 +175,8 @@ paths:
   /streams:
     get:
       tags:
-        - streams
-      summary: Get all streams.
+        - 配信関連
+      summary: 検索条件に合致する配信を取得
       description: Returns an stream list.
       parameters:
         - name: genre
@@ -177,7 +184,8 @@ paths:
           description: Genre of stream to return
           required: false
           schema:
-            type: string
+            type: integer
+            format: int64
       responses:
         "200":
           description: A JSON array of Stream model
@@ -186,7 +194,7 @@ paths:
               schema:
                 type: array
                 items:
-                  $ref: "#/components/schemas/BaseStream"
+                  $ref: "#/components/schemas/Stream"
                 example:
                   - streamid: 1
                     title: "stream1"
@@ -196,15 +204,17 @@ paths:
                     genre: ["genre1", "genre2"]
     post:
       tags:
-        - streams
-      summary: Create a new stream.
+        - 配信関連
+      summary: 新しく配信を開始
       description: Create a new stream with the given Stream model
+      security:
+        - BearerAuth: []
       requestBody:
         required: true
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BaseStream"
+              $ref: "#/components/schemas/Stream"
             example:
               streamid: 1
               title: "stream1"
@@ -225,8 +235,8 @@ paths:
   /streams/{streamid}:
     get:
       tags:
-        - streams/{streamid}
-      summary: Get a stream.
+        - 配信関連
+      summary: IDを指定して配信を取得
       description: Returns a stream with the given streamid
       parameters:
         - name: streamid
@@ -251,9 +261,11 @@ paths:
                 listeners: [{}]
     patch:
       tags:
-        - streams/{streamid}
-      summary: Update a stream.
+        - 配信関連
+      summary: 配信の情報を更新
       description: Update a stream with the given Stream model
+      security:
+        - BearerAuth: []
       parameters:
         - name: streamid
           in: path
@@ -267,7 +279,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: "#/components/schemas/BaseStream"
+              $ref: "#/components/schemas/Stream"
             example:
               title: "stream1"
               genre: ["genre1", "genre2"]
@@ -277,16 +289,18 @@ paths:
           content:
             application/json:
               schema:
-                $ref: "#/components/schemas/BaseStream"
+                $ref: "#/components/schemas/Stream"
               example:
                 streamid: 1
                 title: "stream2"
                 genre: ["genre3"]
     delete:
       tags:
-        - streams/{streamid}
-      summary: Delete a stream.
+        - 配信関連
+      summary: 配信を終了
       description: Delete a stream with the given streamid
+      security:
+        - BearerAuth: []
       parameters:
         - name: streamid
           in: path
@@ -304,28 +318,33 @@ paths:
                 $ref: "#/components/schemas/Stream"
               example: Stream deleted
 components:
+  securitySchemes:
+    BearerAuth:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
   schemas:
-    BaseUser:
+    User:
       type: object
       required:
-        - userid
-        - username
+        - id
+        - name
       properties:
-        userid:
+        id:
           type: integer
           format: int64
-        username:
+        name:
           type: string
-    User:
-      allOf:
-        - $ref: "#/components/schemas/BaseUser"
-        - type: object
-          properties:
-            githubid:
-              type: string
-            googleid:
-              type: string
-    BaseStream:
+        links:
+          type: array
+          items:
+            type: string
+        followers: #本当はUserの配列を入れたいが、循環参照になってしまう
+          type: array
+          items:
+            type: integer
+            format: int64
+    Stream:
       type: object
       required:
         - streamid
@@ -339,17 +358,24 @@ components:
         genre:
           type: array
           items:
-            type: string
-    Stream:
-      allOf:
-        - $ref: "#/components/schemas/BaseStream"
-        - type: object
-          properties:
-            comments:
-              type: array
-              items:
+            type: integer
+            format: int64
+        comments:
+          type: array
+          items:
+            type: object
+            properties:
+              username:
                 type: string
-            listeners:
-              type: array
-              items:
-                $ref: "#/components/schemas/User"
+              message:
+                type: string
+              sendAt:
+                type: string
+        commentLength:
+          type: integer
+        listeners:
+          type: array
+          items:
+            $ref: "#/components/schemas/User"
+        listenerLength:
+          type: integer
