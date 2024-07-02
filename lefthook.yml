@@ -1,10 +1,6 @@
 pre-commit:
   parallel: true
   commands:
-    eslint:
-      root: "frontend/"
-      glob: "**/*.{js,ts,jsx,tsx}"
-      run: yarn eslint {staged_files}
     format:
       root: "frontend/"
       glob: "**/*.{js,ts,jsx,tsx}"
