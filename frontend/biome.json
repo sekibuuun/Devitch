@@ -12,7 +12,8 @@
 			"./app/**/*.json",
 			"./components/common/*.ts",
 			"./components/common/*.tsx"
-		]
+		],
+		"ignore": ["./package.json"]
 	},
 	"vcs": {
 		"enabled": true,
