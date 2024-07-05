@@ -5,12 +5,15 @@
 	},
 	"files": {
 		"include": [
-			"./app/**/.js",
+			"./app/**/*.js",
 			"./app/**/*.mjs",
 			"./app/**/*.ts",
 			"./app/**/*.tsx",
-			"./app/**/*.json"
-		]
+			"./app/**/*.json",
+			"./components/common/*.ts",
+			"./components/common/*.tsx"
+		],
+		"ignore": ["./package.json"]
 	},
 	"vcs": {
 		"enabled": true,
