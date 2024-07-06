@@ -1,1 +1,7 @@
 .vscode
+
+.env
+
+my.cnf
+
+data/
